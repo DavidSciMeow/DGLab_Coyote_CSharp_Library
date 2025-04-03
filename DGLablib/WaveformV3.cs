@@ -3,30 +3,75 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DGLablib
 {
+    /// <summary>
+    /// B0指令构造
+    /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct WaveformV3
     {
+        /// <summary>
+        /// 指令头
+        /// </summary>
         [MarshalAs(UnmanagedType.U1)]
-        public byte Head; // 指令头
+        public byte Head;
+        /// <summary>
+        /// 强度值解读方式
+        /// </summary>
         [MarshalAs(UnmanagedType.U1)]
-        public byte StrengthMode; // 强度值解读方式
+        public byte StrengthMode;
+        /// <summary>
+        /// A通道强度设定值
+        /// </summary>
         [MarshalAs(UnmanagedType.U1)]
-        public byte StrengthA; // A通道强度设定值
+        public byte StrengthA;
+        /// <summary>
+        /// B通道强度设定值
+        /// </summary>
         [MarshalAs(UnmanagedType.U1)]
-        public byte StrengthB; // B通道强度设定值
+        public byte StrengthB;
+        /// <summary>
+        /// A通道波形频率，4个字节
+        /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public byte[] FrequencyA = [0, 0, 0, 0]; // A通道波形频率，4个字节
+        public byte[] FrequencyA = [0, 0, 0, 0];
+        /// <summary>
+        /// A通道波形强度，4个字节
+        /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public byte[] IntensityA = [0, 0, 0, 0]; // A通道波形强度，4个字节
+        public byte[] IntensityA = [0, 0, 0, 0];
+        /// <summary>
+        /// B通道波形频率，4个字节
+        /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public byte[] FrequencyB = [0, 0, 0, 0]; // B通道波形频率，4个字节
+        public byte[] FrequencyB = [0, 0, 0, 0];
+        /// <summary>
+        /// B通道波形强度，4个字节
+        /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public byte[] IntensityB = [0, 0, 0, 0]; // B通道波形强度，4个字节
+        public byte[] IntensityB = [0, 0, 0, 0];
 
+        /// <summary>
+        /// 序列号
+        /// </summary>
         public byte Number;
+        /// <summary>
+        /// A通道波形持续时间
+        /// </summary>
         public readonly int MilisecondLastA => GetMiliLast(FrequencyA);
+        /// <summary>
+        /// B通道波形持续时间
+        /// </summary>
         public readonly int MilisecondLastB => GetMiliLast(FrequencyB);
 
+        /// <summary>
+        /// 构造B0函数
+        /// </summary>
+        /// <param name="strengthA">A通道强度设定值</param>
+        /// <param name="strengthB">B通道强度设定值</param>
+        /// <param name="frequencyA">A通道波形频率，4个字节</param>
+        /// <param name="intensityA">A通道波形强度，4个字节</param>
+        /// <param name="frequencyB">B通道波形频率，4个字节</param>
+        /// <param name="intensityB">B通道波形强度，4个字节</param>
         public WaveformV3(byte? strengthA = null, byte? strengthB = null, byte[]? frequencyA = null, byte[]? intensityA = null, byte[]? frequencyB = null, byte[]? intensityB = null)
         {
             Head = 0xB0;
@@ -39,6 +84,12 @@ namespace DGLablib
             FrequencyB = frequencyB ?? [0, 0, 0, 0];
             IntensityB = intensityB ?? [0, 0, 0, 0];
         }
+        /// <summary>
+        /// 构造B0函数(AB通道相同)
+        /// </summary>
+        /// <param name="strength">通道强度设定值</param>
+        /// <param name="frequency">通道波形频率，4个字节</param>
+        /// <param name="intensity">通道波形强度，4个字节</param>
         public WaveformV3(byte? strength = null, byte[]? frequency = null, byte[]? intensity = null)
         {
             Head = 0xB0;
@@ -51,6 +102,11 @@ namespace DGLablib
             FrequencyB = [0,0,0,0];
             IntensityB = [0,0,0,101];
         }
+        /// <summary>
+        /// 构造B0函数(快速输出A通道)
+        /// </summary>
+        /// <param name="strength">通道强度设定值</param>
+        /// <param name="frequency">通道波形频率，4个字节</param>
         public WaveformV3(byte? strength = null, byte[]? frequency = null)
         {
             Head = 0xB0;
@@ -64,6 +120,10 @@ namespace DGLablib
             IntensityB = [0, 0, 0, 101];
         }
 
+        /// <summary>
+        /// 隐式转换byte[]
+        /// </summary>
+        /// <param name="waveform">波形模式</param>
         public static implicit operator byte[](WaveformV3 waveform)
         {
             byte[] arr = new byte[20];
@@ -73,6 +133,10 @@ namespace DGLablib
             Marshal.FreeHGlobal(ptr);
             return arr;
         }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
         public override readonly string ToString()
         {
             static string FormatWaveData(string waveType, byte strength, byte[] frequency, byte[] intensity)
@@ -104,6 +168,11 @@ namespace DGLablib
             }
         }
 
+        /// <summary>
+        /// 获取持续时间
+        /// </summary>
+        /// <param name="freq">频率列</param>
+        /// <returns></returns>
         static int GetMiliLast(byte[] freq)
         {
             if (freq == null) return 100;
@@ -114,6 +183,11 @@ namespace DGLablib
             }
             return lst;
         }
+        /// <summary>
+        /// V3映射频率到毫秒
+        /// </summary>
+        /// <param name="value">频率值</param>
+        /// <returns>毫秒值</returns>
         public static double MapValueToMilliseconds(double value)
         {
             if (value >= 100 && value <= 180)
@@ -133,6 +207,11 @@ namespace DGLablib
                 return 100;
             }
         }
+        /// <summary>
+        /// V3映射毫秒到频率byte[]
+        /// </summary>
+        /// <param name="milisec">毫秒值</param>
+        /// <returns>频率值</returns>
         public static byte MapValueToByte(double milisec) => (byte)(milisec * (7 / 45) + 84.4444);
     }
 }
