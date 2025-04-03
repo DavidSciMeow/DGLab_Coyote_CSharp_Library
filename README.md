@@ -1,4 +1,6 @@
 # CoyoteLibCSharp
+![Nuget下载数](https://img.shields.io/nuget/dt/Meow.DGLablib)    
+![Nuget包版本](https://img.shields.io/nuget/vpre/Meow.DGLablib?label=NuGet%20Version)   
 ## 郊狼控制库 C#\[.NET\]版本 \(非跨平台/仅限Windows\) \(目前只有V3\)
 
 ### 基础使用方式
