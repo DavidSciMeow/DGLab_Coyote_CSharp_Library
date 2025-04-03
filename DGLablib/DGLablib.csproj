@@ -14,6 +14,22 @@
     <Company>Electronicute</Company>
     <Product>DGLab Library</Product>
     <Description>控制郊狼V3的库文件</Description>
+    <Copyright>&amp;copy; Electronicute 2025</Copyright>
+    <PackageProjectUrl>https://github.com/DavidSciMeow/DGLab_Coyote_CSharp_Library</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DavidSciMeow/DGLab_Coyote_CSharp_Library</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>DGLab CoyoteV3 Library</PackageTags>
+    <NeutralLanguage>zh</NeutralLanguage>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
