@@ -1,10 +1,11 @@
 using System.Reflection.PortableExecutable;
 using System.Text;
+using System.Threading;
+using System.Windows.Threading;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
 using Windows.Storage.Streams;
-using System.Threading;
 
 namespace DGLablib
 {
@@ -267,9 +268,16 @@ namespace DGLablib
         {
             var devices = new List<CoyoteDeviceV3>();
             var selector = BluetoothLEDevice.GetDeviceSelector();
-            var deviceInfos = await DeviceInformation.FindAllAsync(selector);
+            var devices_general = new List<DeviceInformation>();
+            var deviceWatcher = DeviceInformation.CreateWatcher(selector);
+            bool enuming = true;
+            deviceWatcher.Added += (watcher, deviceInfo) => devices_general.Add(deviceInfo);
+            deviceWatcher.EnumerationCompleted += (watcher, obj) => enuming = false;
+            deviceWatcher.Start();
+            while (enuming) Task.Delay(100).Wait();
+            //var deviceInfos = await DeviceInformation.FindAllAsync(selector);
 
-            foreach (var deviceInfo in deviceInfos)
+            foreach (var deviceInfo in devices_general)
             {
                 if (deviceInfo.Name.Equals(CoyoteV3.Name) || deviceInfo.Name.Equals(CoyoteV3.WirelessSensorName))
                 {

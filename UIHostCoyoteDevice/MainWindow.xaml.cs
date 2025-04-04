@@ -9,6 +9,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Windows.Devices.Bluetooth;
+using Windows.Devices.Enumeration;
 
 namespace UIHostCoyoteDevice
 {
@@ -19,18 +21,15 @@ namespace UIHostCoyoteDevice
         {
             InitializeComponent();
         }
-        private void OnUpdateClick(object sender, RoutedEventArgs e)
+        private void OnOneShotClick(object sender, RoutedEventArgs e)
         {
-            if (CoyoteDevice != null)
-            {
-                CoyoteDevice.WaveNow = new(
+            CoyoteDevice?.SetWaveformAsync(new(
                     byte.Parse(SA.Text),
                     byte.Parse(SB.Text),
                     [byte.Parse(fA1.Text), byte.Parse(fA2.Text), byte.Parse(fA3.Text), byte.Parse(fA4.Text)],
                     [byte.Parse(iA1.Text), byte.Parse(iA2.Text), byte.Parse(iA3.Text), byte.Parse(iA4.Text)],
                     [byte.Parse(fB1.Text), byte.Parse(fB2.Text), byte.Parse(fB3.Text), byte.Parse(fB4.Text)],
-                    [byte.Parse(iB1.Text), byte.Parse(iB2.Text), byte.Parse(iB3.Text), byte.Parse(iB4.Text)]);
-            }
+                    [byte.Parse(iB1.Text), byte.Parse(iB2.Text), byte.Parse(iB3.Text), byte.Parse(iB4.Text)]));
         }
         private void OnStartClick(object sender, RoutedEventArgs e)
         {
@@ -51,12 +50,48 @@ namespace UIHostCoyoteDevice
         {
             Task.Run(async () =>
             {
+                var selector = BluetoothLEDevice.GetDeviceSelector();
+                var deviceWatcher = DeviceInformation.CreateWatcher(selector);
+                var devlist = new List<DeviceInformation>();
+                bool enuming = true;
+                deviceWatcher.Added += async (watcher, deviceInfo) =>
+                {
+                    devlist.Add(deviceInfo);
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        OutputTextBox.Text += $"Device Found...{deviceInfo.Name} {deviceInfo.Id}\n";
+                        OutputTextBox.ScrollToEnd();
+                    });
+                };
+
+                deviceWatcher.Removed += async (watcher, deviceInfoUpdate) =>
+                {
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        OutputTextBox.Text += $"Device Removed...{deviceInfoUpdate.Id}\n";
+                        OutputTextBox.ScrollToEnd();
+                    });
+                };
+
+                deviceWatcher.EnumerationCompleted += async (watcher, obj) =>
+                {
+                    enuming = false;
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        OutputTextBox.Text += "Device enumeration completed.\n";
+                        OutputTextBox.ScrollToEnd();
+                    });
+                };
+                deviceWatcher.Start();
+                while (enuming) Task.Delay(100).Wait();
+
                 await Dispatcher.InvokeAsync(() =>
                 {
                     OutputTextBox.Text += "Scanning for Coyote devices...\n";
                     OutputTextBox.ScrollToEnd();
                 });
-                List<CoyoteDeviceV3> devices = await CoyoteDeviceV3.Scan();
+
+                var devices = await CoyoteDeviceV3.Scan();
 
                 if (devices.Count == 0)
                 {

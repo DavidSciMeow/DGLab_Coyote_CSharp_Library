@@ -63,7 +63,7 @@
         <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
             <Button Content="Scan" Width="100" Margin="5" Click="OnScanClick" />
             <Button Content="Start" Width="100" Margin="5" Click="OnStartClick" />
-            <Button Content="Update" Width="100" Margin="5" Click="OnUpdateClick" />
+            <Button Content="OneShot" Width="100" Margin="5" Click="OnOneShotClick" />
             <Button Content="Stop" Width="100" Margin="5" Click="OnStopClick" />
         </StackPanel>
         
