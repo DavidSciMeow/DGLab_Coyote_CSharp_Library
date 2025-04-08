@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:UIHostCoyoteDevice"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     </Application.Resources>
 </Application>

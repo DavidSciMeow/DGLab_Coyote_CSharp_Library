@@ -1,8 +1,10 @@
+using System.Diagnostics;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading;
 using System.Windows.Threading;
 using Windows.Devices.Bluetooth;
+using Windows.Devices.Bluetooth.Advertisement;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
 using Windows.Storage.Streams;
@@ -12,16 +14,16 @@ namespace DGLablib
     /// <summary>
     /// 郊狼3设备类
     /// </summary>
-    public class CoyoteDeviceV3
+    public class CoyoteDeviceV3 : IDisposable
     {
         /// <summary>
         /// 具体请求的设备
         /// </summary>
-        private BluetoothLEDevice _device;
+        private readonly BluetoothLEDevice _device;
         /// <summary>
         /// 特性保存串
         /// </summary>
-        private readonly Dictionary<string, GattCharacteristic> _characteristics = new();
+        private readonly Dictionary<string, GattCharacteristic> _characteristics = [];
         /// <summary>
         /// 上次输出的字符串
         /// </summary>
@@ -34,6 +36,8 @@ namespace DGLablib
         /// 任务取消标
         /// </summary>
         public CancellationTokenSource _cancellationTokenSource;
+        private bool disposedValue;
+
         /// <summary>
         /// 接收到通知回调
         /// </summary>
@@ -67,7 +71,7 @@ namespace DGLablib
         /// <summary>
         /// 电池电量 (0-100)
         /// </summary>
-        public byte BatteryLevel => ReadCharacteristicAsync(CoyoteV3.BatteryData.ToString()).GetAwaiter().GetResult()[0];
+        public async Task<byte?> GetBatteryLevel() => (await ReadCharacteristicAsync(CoyoteV3.BatteryData.ToString()))?[0] ?? null;
         /// <summary>
         /// 设备名
         /// </summary>
@@ -119,13 +123,15 @@ namespace DGLablib
                                 }
                                 else if (input[0] == 0xE0)
                                 {
-                                    B1MessageReceived?.Invoke(input[1], new byte[] { 0, 0 });
+                                    B1MessageReceived?.Invoke(input[1], [0, 0]);
                                 }
                             };
                         }
                     }
                 }
             }
+
+            SetWaveBFAsync(new WaveformBF(200)).GetAwaiter().GetResult();
         }
         /// <summary>
         /// 输入电压任务
@@ -202,7 +208,7 @@ namespace DGLablib
                     return input;
                 }
             }
-            return Array.Empty<byte>();
+            return [];
         }
         /// <summary>
         /// 设置特性通知模式
@@ -261,45 +267,103 @@ namespace DGLablib
         /// <returns>是否设置成功</returns>
         public Task<bool> SetWaveBFAsync(WaveformBF command) => WriteComaandAsync(command);
         /// <summary>
-        /// 默认的扫描设备函数
+        /// 扫描所有设备
         /// </summary>
-        /// <returns>返回所有郊狼3实例</returns>
-        public static async Task<List<CoyoteDeviceV3>> Scan()
+        /// <returns></returns>
+        public static async Task<List<CoyoteDeviceV3>> ScanAll()
         {
-            var devices = new List<CoyoteDeviceV3>();
-            var selector = BluetoothLEDevice.GetDeviceSelector();
-            var devices_general = new List<DeviceInformation>();
-            var deviceWatcher = DeviceInformation.CreateWatcher(selector);
-            bool enuming = true;
-            deviceWatcher.Added += (watcher, deviceInfo) => devices_general.Add(deviceInfo);
-            deviceWatcher.EnumerationCompleted += (watcher, obj) => enuming = false;
-            deviceWatcher.Start();
-            while (enuming) Task.Delay(100).Wait();
-            //var deviceInfos = await DeviceInformation.FindAllAsync(selector);
-
-            foreach (var deviceInfo in devices_general)
+            if (!await Util.IsBluetoothEnabledAsync()) await Util.RequestEnableBluetoothAsync();
+            List<CoyoteDeviceV3> device = [];
+            foreach (var i in await DeviceInformation.FindAllAsync(BluetoothLEDevice.GetDeviceSelectorFromConnectionStatus(BluetoothConnectionStatus.Connected)))
             {
-                if (deviceInfo.Name.Equals(CoyoteV3.Name) || deviceInfo.Name.Equals(CoyoteV3.WirelessSensorName))
+                var ledev = await BluetoothLEDevice.FromIdAsync(i.Id);
+                Debug.WriteLine($"Found : {ledev.Name.Trim()}");
+                if (ledev.Name.Trim().Equals(CoyoteV3.Name.Trim()))
                 {
-                    var device = await BluetoothLEDevice.FromIdAsync(deviceInfo.Id);
-                    if (device != null)
-                    {
-                        var coyoteDevice = new CoyoteDeviceV3(device);
-                        devices.Add(coyoteDevice);
-                    }
+                    device.Add(new CoyoteDeviceV3(ledev));
+                    Debug.WriteLine($"Founded ! : {ledev.Name.Trim()}");
                 }
             }
-
-            return devices;
+            foreach (var i in await DeviceInformation.FindAllAsync(BluetoothLEDevice.GetDeviceSelectorFromConnectionStatus(BluetoothConnectionStatus.Disconnected)))
+            {
+                var ledev = await BluetoothLEDevice.FromIdAsync(i.Id);
+                Debug.WriteLine($"Found : {ledev.Name.Trim()}");
+                if (ledev.Name.Trim().Equals(CoyoteV3.Name.Trim()))
+                {
+                    device.Add(new CoyoteDeviceV3(ledev));
+                    Debug.WriteLine($"Founded ! : {ledev.Name.Trim()}");
+                }
+            }
+            return device;
         }
         /// <summary>
-        /// 析构函数
+        /// 默认的扫描设备函数(扫描一个)
         /// </summary>
-        ~CoyoteDeviceV3()
+        /// <returns>返回所有郊狼3实例</returns>
+        public static async Task<CoyoteDeviceV3?> ScanFirst()
         {
-            _cancellationTokenSource.Cancel();
-            InputVoltTask.Dispose();
-            SetNotifyAsync(CoyoteV3.CharacteristicNotify.ToString(), false).GetAwaiter().GetResult();
+            if (!await Util.IsBluetoothEnabledAsync()) await Util.RequestEnableBluetoothAsync();
+            foreach (var i in await DeviceInformation.FindAllAsync(BluetoothLEDevice.GetDeviceSelectorFromConnectionStatus(BluetoothConnectionStatus.Connected)))
+            {
+                var ledev = await BluetoothLEDevice.FromIdAsync(i.Id);
+                Debug.WriteLine($"Found : {ledev.Name.Trim()}");
+                if (ledev.Name.Trim().Equals(CoyoteV3.Name.Trim()))
+                {
+                    Debug.WriteLine($"Founded ! : {ledev.Name.Trim()}");
+                    return new CoyoteDeviceV3(ledev);
+                }
+            }
+            foreach (var i in await DeviceInformation.FindAllAsync(BluetoothLEDevice.GetDeviceSelectorFromConnectionStatus(BluetoothConnectionStatus.Disconnected)))
+            {
+                var ledev = await BluetoothLEDevice.FromIdAsync(i.Id);
+                Debug.WriteLine($"Found : {ledev.Name.Trim()}");
+                if (ledev.Name.Trim().Equals(CoyoteV3.Name.Trim()))
+                {
+                    Debug.WriteLine($"Founded ! : {ledev.Name.Trim()}");
+                    return new CoyoteDeviceV3(ledev);
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="disposing"><inheritdoc/></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _device.Dispose();
+                    _cancellationTokenSource.Cancel();
+                    InputVoltTask.Dispose();
+                    SetNotifyAsync(CoyoteV3.CharacteristicNotify.ToString(), false).GetAwaiter().GetResult();
+                    Debug.WriteLine("dispose compelte");
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~CoyoteDeviceV3()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

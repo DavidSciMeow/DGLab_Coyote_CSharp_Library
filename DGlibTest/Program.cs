@@ -8,11 +8,11 @@ namespace ConsoleApp
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static async void Main(string[] args)
         {
             
             Console.WriteLine("Scanning for Coyote devices...");
-            List<CoyoteDeviceV3> devices = await CoyoteDeviceV3.Scan();
+            List<CoyoteDeviceV3> devices = await CoyoteDeviceV3.ScanAll();
 
             if (devices.Count == 0)
             {
@@ -42,7 +42,7 @@ namespace ConsoleApp
             //};
 
             Console.WriteLine($"Connecting to {coyoteDevice.Name}...");
-            Console.WriteLine($"Battery level: {coyoteDevice.BatteryLevel}%");
+            Console.WriteLine($"Battery level: {await coyoteDevice.GetBatteryLevel()}%");
 
             // Example: Set waveform
             WaveformV3 waveform = new(150, [100, 100, 100, 100], [60, 60, 60, 60]);

@@ -12,7 +12,7 @@
         /// <summary>
         /// 实例无线识别名
         /// </summary>
-        public static string WirelessSensorName { get; } = "47L120100";
+        public static string WirelessSensorName { get; } = "47L121000";
         /// <summary>
         /// 写服务特性ID
         /// </summary>
