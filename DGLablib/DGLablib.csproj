@@ -9,7 +9,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>Meow.DGLablib</PackageId>
     <Title>Dungeon Lab Library</Title>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>DavidSciMeow</Authors>
     <Company>Electronicute</Company>
     <Product>DGLab Library</Product>
@@ -23,6 +23,7 @@
     <NeutralLanguage>zh</NeutralLanguage>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <AssemblyVersion></AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,6 +31,10 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
 </Project>

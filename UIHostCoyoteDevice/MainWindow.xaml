@@ -88,11 +88,13 @@
         </StackPanel>
 
         <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button Name="ScanButton" Content="Scan" Width="100" Margin="5" Click="OnScanClick"/>
-            <Button Name="StartButton" Content="Start" Width="100" Margin="5" Click="OnStartClick"/>
-            <Button Name="OneShotButton" Content="OneShot" Width="100" Margin="5" Click="OnOneShotClick"/>
-            <Button Name="StopButton" Content="Stop" Width="100" Margin="5" Click="OnStopClick"/>
-            <Button Name="UpdateButton" Content="Update" Width="100" Margin="5" Click="OnUpdateClick"/>
+            <Button Name="ScanButton" Content="扫描设备" Width="100" Margin="5" Click="OnScanClick"/>
+            <Button Name="StartButton" Content="开始" Width="100" Margin="5" Click="OnStartClick"/>
+            <Button Name="OneShotButton" Content="单次触发" Width="100" Margin="5" Click="OnOneShotClick"/>
+            <Button Name="StopButton" Content="停止" Width="100" Margin="5" Click="OnStopClick"/>
+            <Button Name="UpdateButton" Content="更新波形" Width="100" Margin="5" Click="OnUpdateClick"/>
+            <Button Name="Export" Content="输出波形哈希" Width="100" Margin="5" Click="OnExportClick"/>
+            <Button Name="Import" Content="输入波形哈希" Width="100" Margin="5" Click="OnInputHashButtonClick"/>
         </StackPanel>
 
         <TextBox Name="OutputTextBox" Grid.Row="7" Margin="10" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap"/>

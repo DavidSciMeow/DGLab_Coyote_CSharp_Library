@@ -4,13 +4,13 @@ using System.Drawing;
 using System.Threading.Tasks;
 using DGLablib;
 
-namespace ConsoleApp
+namespace DGlibTest
 {
     class Program
     {
         static async void Main(string[] args)
         {
-            
+            _ = args;
             Console.WriteLine("Scanning for Coyote devices...");
             List<CoyoteDeviceV3> devices = await CoyoteDeviceV3.ScanAll();
 

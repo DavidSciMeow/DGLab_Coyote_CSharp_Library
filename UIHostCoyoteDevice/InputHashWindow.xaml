@@ -1,0 +1,13 @@
+﻿<Window x:Class="UIHostCoyoteDevice.InputHashWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="输入加密哈希" Height="150" Width="300">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBox x:Name="HashInputTextBox" Grid.Row="0" Margin="0,0,0,10" VerticalAlignment="Center" />
+        <Button Content="确定" Click="OnConfirmButtonClick" Grid.Row="1" Width="100" HorizontalAlignment="Center" />
+    </Grid>
+</Window>

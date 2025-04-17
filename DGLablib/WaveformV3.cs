@@ -1,5 +1,5 @@
-﻿using System.Runtime.InteropServices;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using Newtonsoft.Json;
+using System.Runtime.InteropServices;
 
 namespace DGLablib
 {
@@ -13,54 +13,65 @@ namespace DGLablib
         /// 指令头
         /// </summary>
         [MarshalAs(UnmanagedType.U1)]
+        [JsonProperty]
         public byte Head;
         /// <summary>
         /// 强度值解读方式
         /// </summary>
         [MarshalAs(UnmanagedType.U1)]
+        [JsonProperty]
         public byte StrengthMode;
         /// <summary>
         /// A通道强度设定值
         /// </summary>
         [MarshalAs(UnmanagedType.U1)]
+        [JsonProperty]
         public byte StrengthA;
         /// <summary>
         /// B通道强度设定值
         /// </summary>
         [MarshalAs(UnmanagedType.U1)]
+        [JsonProperty]
         public byte StrengthB;
         /// <summary>
         /// A通道波形频率，4个字节
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        [JsonProperty]
         public byte[] FrequencyA = [0, 0, 0, 0];
         /// <summary>
         /// A通道波形强度，4个字节
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        [JsonProperty]
         public byte[] IntensityA = [0, 0, 0, 0];
         /// <summary>
         /// B通道波形频率，4个字节
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        [JsonProperty]
         public byte[] FrequencyB = [0, 0, 0, 0];
         /// <summary>
         /// B通道波形强度，4个字节
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        [JsonProperty]
         public byte[] IntensityB = [0, 0, 0, 0];
 
         /// <summary>
         /// 序列号
         /// </summary>
+        [JsonIgnore]
         public byte Number;
         /// <summary>
         /// A通道波形持续时间
         /// </summary>
+        [JsonIgnore]
         public readonly int MilisecondLastA => GetMiliLast(FrequencyA);
         /// <summary>
         /// B通道波形持续时间
         /// </summary>
+        [JsonIgnore]
         public readonly int MilisecondLastB => GetMiliLast(FrequencyB);
 
         /// <summary>

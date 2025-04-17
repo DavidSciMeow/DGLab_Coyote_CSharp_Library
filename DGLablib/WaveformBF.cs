@@ -6,64 +6,54 @@ namespace DGLablib
     /// <summary>
     /// BF指令构造
     /// </summary>
+    /// <remarks>
+    /// 构造BF指令
+    /// </remarks>
+    /// <param name="strengthUpperLimitA">A通道强度软上限</param>
+    /// <param name="strengthUpperLimitB">B通道强度软上限</param>
+    /// <param name="strengthFormParaA">A通道波形频率平衡参数</param>
+    /// <param name="strengthFormParaB">B通道波形频率平衡参数</param>
+    /// <param name="strengthVoltParaA">A通道波形强度平衡参数</param>
+    /// <param name="strengthVoltParaB">B通道波形强度平衡参数</param>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct WaveformBF
+    public struct WaveformBF(byte? strengthUpperLimitA = null, byte? strengthUpperLimitB = null, byte? strengthFormParaA = null, byte? strengthFormParaB = null, byte? strengthVoltParaA = null, byte? strengthVoltParaB = null)
     {
         /// <summary>
         /// 指令头
         /// </summary>
         [MarshalAs(UnmanagedType.U1)]
-        public byte Head;
+        public byte Head = 0xBF;
         /// <summary>
         /// A通道强度软上限
         /// </summary>
         [MarshalAs(UnmanagedType.U1)]
-        public byte StrengthUpperLimitA;
+        public byte StrengthUpperLimitA = strengthUpperLimitA ?? 0;
         /// <summary>
         /// B通道强度软上限
         /// </summary>
         [MarshalAs(UnmanagedType.U1)]
-        public byte StrengthUpperLimitB;
+        public byte StrengthUpperLimitB = strengthUpperLimitB ?? 0;
         /// <summary>
         /// A通道波形频率平衡参数
         /// </summary>
         [MarshalAs(UnmanagedType.U1)]
-        public byte StrengthFormParaA;
+        public byte StrengthFormParaA = strengthFormParaA ?? 0;
         /// <summary>
         /// B通道波形频率平衡参数
         /// </summary>
         [MarshalAs(UnmanagedType.U1)]
-        public byte StrengthFormParaB;
+        public byte StrengthFormParaB = strengthFormParaB ?? 0;
         /// <summary>
         /// A通道波形强度平衡参数
         /// </summary>
         [MarshalAs(UnmanagedType.U1)]
-        public byte StrengthVoltParaA;
+        public byte StrengthVoltParaA = strengthVoltParaA ?? 0;
         /// <summary>
         /// B通道波形强度平衡参数
         /// </summary>
         [MarshalAs(UnmanagedType.U1)]
-        public byte StrengthVoltParaB;
+        public byte StrengthVoltParaB = strengthVoltParaB ?? 0;
 
-        /// <summary>
-        /// 构造BF指令
-        /// </summary>
-        /// <param name="strengthUpperLimitA">A通道强度软上限</param>
-        /// <param name="strengthUpperLimitB">B通道强度软上限</param>
-        /// <param name="strengthFormParaA">A通道波形频率平衡参数</param>
-        /// <param name="strengthFormParaB">B通道波形频率平衡参数</param>
-        /// <param name="strengthVoltParaA">A通道波形强度平衡参数</param>
-        /// <param name="strengthVoltParaB">B通道波形强度平衡参数</param>
-        public WaveformBF(byte? strengthUpperLimitA = null, byte? strengthUpperLimitB = null, byte? strengthFormParaA = null, byte? strengthFormParaB = null, byte? strengthVoltParaA = null, byte? strengthVoltParaB = null)
-        {
-            Head = 0xBF;
-            StrengthUpperLimitA = strengthUpperLimitA ?? 0;
-            StrengthUpperLimitB = strengthUpperLimitB ?? 0;
-            StrengthFormParaA = strengthFormParaA ?? 0;
-            StrengthFormParaB = strengthFormParaB ?? 0;
-            StrengthVoltParaA = strengthVoltParaA ?? 0;
-            StrengthVoltParaB = strengthVoltParaB ?? 0;
-        }
         /// <summary>
         /// 隐式转换为byte[]
         /// </summary>
