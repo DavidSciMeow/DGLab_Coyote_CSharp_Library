@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DGlibTest", "DGlibTest\DGli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIHostCoyoteDevice", "UIHostCoyoteDevice\UIHostCoyoteDevice.csproj", "{D92C3D1A-A223-4D2B-83D9-37C62F776AB1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginContracts", "PluginContracts\PluginContracts.csproj", "{21B9EEA3-809F-4992-9B72-15FBB66354F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarthunderDLL", "WarthunderDLL\WarthunderDLL.csproj", "{49168154-36E5-488C-9C5B-185FDEC0EA17}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{D92C3D1A-A223-4D2B-83D9-37C62F776AB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D92C3D1A-A223-4D2B-83D9-37C62F776AB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D92C3D1A-A223-4D2B-83D9-37C62F776AB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21B9EEA3-809F-4992-9B72-15FBB66354F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21B9EEA3-809F-4992-9B72-15FBB66354F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21B9EEA3-809F-4992-9B72-15FBB66354F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21B9EEA3-809F-4992-9B72-15FBB66354F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49168154-36E5-488C-9C5B-185FDEC0EA17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49168154-36E5-488C-9C5B-185FDEC0EA17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49168154-36E5-488C-9C5B-185FDEC0EA17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49168154-36E5-488C-9C5B-185FDEC0EA17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

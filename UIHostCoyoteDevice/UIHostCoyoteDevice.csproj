@@ -11,7 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Composition" Version="9.0.4" />
+    <PackageReference Include="System.Composition" Version="9.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DGLablib\DGLablib.csproj" />
+    <ProjectReference Include="..\PluginContracts\PluginContracts.csproj" />
   </ItemGroup>
 
 </Project>
