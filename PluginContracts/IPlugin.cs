@@ -13,14 +13,5 @@ namespace DGLablib.PluginContracts
         Action<WaveformV3> SetWave { get; set; }
         Action<string> Say { get; set; }
     }
-
-    public abstract class PluginBase : IPlugin
-    {
-        public abstract string Name { get; }
-        public abstract string? Description { get; }
-        public abstract void Init(CancellationToken ctl);
-        public Action<string> Say { get; set; } = null!;
-        public Action<WaveformV3> SetWave { get; set; } = null!;
-    }
 }
 

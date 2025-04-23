@@ -13,6 +13,7 @@
         MinWidth="1280" 
         FontSize="20" 
         FontFamily="Microsoft YaHei UI">
+    
 
     <Grid Name="MainGrid" Margin="10">
         <!-- 两行，第一行用于TabControl，第二行用于调试输出框 -->
@@ -45,7 +46,7 @@
 
             </TabItem>
             <!-- 第二页, 设备输入输出控制 -->
-            <TabItem Header="输出控制" IsEnabled="{Binding IsDeviceConnected}">
+            <TabItem Header="输出控制" IsEnabled="{Binding IsSecondPageEnabled}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="2*"/>
@@ -137,7 +138,7 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="插件管理" IsEnabled="{Binding IsDeviceConnected}">
+            <TabItem Header="插件管理" IsEnabled="{Binding IsThirdPageEnabled}">
                 <StackPanel>
                     <Button Content="扫描插件" Click="OnLoadPluginsClick" />
                     <ListView ItemsSource="{Binding Plugins}">
@@ -147,6 +148,7 @@
                                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsEnabled, Mode=TwoWay}" Checked="OnPluginEnabledChanged" Unchecked="OnPluginEnabledChanged" />
                                     <TextBlock VerticalAlignment="Center" Margin="10" Text="{Binding Name}"/>
                                     <TextBlock VerticalAlignment="Center" Margin="10" Text="{Binding Description}"/>
+                                    <Button Content="设置" Width="75" Margin="5,0,0,0" VerticalAlignment="Center" Click="OnSettingsButtonClick" Tag="{Binding}" />
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>

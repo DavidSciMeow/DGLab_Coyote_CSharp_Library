@@ -7,7 +7,7 @@ namespace UIHostCoyoteDevice
     public partial class MainWindow : Window
     {
         string? b1buf = null;
-        string? nbuf = null;
+        //string? nbuf = null;
         private async void OnScanClick(object sender, RoutedEventArgs e)
         {
             ScanButton.IsEnabled = false;

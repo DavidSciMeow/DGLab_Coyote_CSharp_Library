@@ -1,13 +1,13 @@
-﻿using System.ComponentModel;
+﻿using DGLablib;
+using DGLablib.PluginContracts;
+using System.ComponentModel;
+using System.Threading;
 
 namespace UIHostCoyoteDevice
 {
     public class PluginModel : INotifyPropertyChanged
     {
         private string? _name;
-        private string? _description;
-        private bool _isEnabled;
-
         public string? Name
         {
             get => _name;
@@ -17,6 +17,8 @@ namespace UIHostCoyoteDevice
                 OnPropertyChanged(nameof(Name));
             }
         }
+
+        private string? _description;
         public string? Description
         {
             get => _description;
@@ -27,6 +29,7 @@ namespace UIHostCoyoteDevice
             }
         }
 
+        private bool _isEnabled;
         public bool IsEnabled
         {
             get => _isEnabled;
@@ -34,6 +37,17 @@ namespace UIHostCoyoteDevice
             {
                 _isEnabled = value;
                 OnPropertyChanged(nameof(IsEnabled));
+            }
+        }
+
+        private IPlugin? _plugin;
+        public IPlugin? Plugin
+        {
+            get => _plugin;
+            set
+            {
+                _plugin = value;
+                OnPropertyChanged(nameof(Plugin));
             }
         }
 

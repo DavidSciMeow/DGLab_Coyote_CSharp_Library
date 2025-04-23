@@ -12,7 +12,7 @@ namespace UIHostCoyoteDevice
 {
     public partial class MainWindow : Window
     {
-        [ImportMany] public IEnumerable<IPlugin> _ipl { get; set; } = null!;
+        [ImportMany] public IEnumerable<IPlugin> Ipl { get; set; } = null!;
         private void OnLoadPluginsClick(object sender, RoutedEventArgs e)
         {
             try
@@ -22,8 +22,8 @@ namespace UIHostCoyoteDevice
                 var container = new CompositionContainer(catalog);
                 container.ComposeParts(this);
                 ViewModel.Plugins.Clear();
-                _ipl = [.. _ipl.GroupBy(plugin => plugin.Name).Select(group => group.First())];
-                foreach (var plugin in _ipl)
+                Ipl = [.. Ipl.GroupBy(plugin => plugin.Name).Select(group => group.First())];
+                foreach (var plugin in Ipl)
                 {
                     if (plugin != null && CoyoteDevice != null)
                     {
@@ -40,56 +40,103 @@ namespace UIHostCoyoteDevice
                                 CoyoteDevice?.Start();
                                 plugin.Init(cancellationTokenSource.Token);
                             }, cancellationTokenSource.Token),
+                            Plugin = plugin,
                             CancellationTokenSource = cancellationTokenSource
                         };
                         ViewModel.Plugins.Add(t);
                     }
                 }
-                MessageBox.Show("插件扫描完成！");
+                Say("插件扫描完成！");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"扫描插件时出错: {ex.Message}");
             }
         }
-        private void OnPluginEnabledChanged(object sender, RoutedEventArgs e)
+        private void OnSettingsButtonClick(object sender, RoutedEventArgs e)
         {
-            if (sender is CheckBox { DataContext: PluginModel pluginModel })
+            if (sender is Button { Tag: PluginModel pluginModel } && pluginModel.Plugin != null)
             {
-                if (pluginModel.IsEnabled)
+                // 检查插件是否有设置
+                if (pluginModel.Plugin != null)
                 {
-                    try
-                    {
-                        pluginModel.PluginTask?.Start();
-                        Say($"插件 {pluginModel.Name} 已启用。");
-                    }
-                    catch (Exception ex)
-                    {
-                        Say($"启用插件 {pluginModel.Name} 时出错: {ex.Message}");
-                        pluginModel.IsEnabled = false; // 回退状态
-                    }
+                    // 打开设置窗口
+                    var settingsWindow = new SettingsWindow((PluginBase)pluginModel.Plugin);
+                    settingsWindow.ShowDialog();
                 }
                 else
                 {
-                    try
+                    MessageBox.Show($"插件 {pluginModel.Name} 没有可配置的设置。", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+        }
+        private void OnPluginEnabledChanged(object sender, RoutedEventArgs e)
+        {
+            {
+                if (sender is Button { Tag: PluginModel pluginModel } && pluginModel.Plugin != null)
+                {
+                    var settingsWindow = new SettingsWindow((PluginBase)pluginModel.Plugin);
+                    settingsWindow.ShowDialog();
+                }
+            }
+            { 
+                if (sender is CheckBox { DataContext: PluginModel pluginModel })
+                {
+                    if (pluginModel.IsEnabled)
                     {
-                        pluginModel.CancellationTokenSource?.Cancel();
-                        if (CoyoteDevice != null) CoyoteDevice.WaveNow = new DGLablib.WaveformV3();
+                        if (ViewModel.IsDeviceConnected)
+                        {
+                            ViewModel.ActivateThirdPage();
+                            Say("第三页已启用，第二页已禁用。");
+                        }
+                        else
+                        {
+                            pluginModel.IsEnabled = false; // 回退状态
+                            Say("设备未连接，无法启用第三页。");
+                        }
+
                         try
                         {
-                            pluginModel.PluginTask?.Wait(); // 等待任务完成或取消
-                            Say($"插件 {pluginModel.Name} 的任务已退出。");
+                            pluginModel.PluginTask?.Start();
+                            Say($"插件 {pluginModel.Name} 已启用。");
                         }
-                        catch (AggregateException ex) when (ex.InnerExceptions.All(e => e is TaskCanceledException))
+                        catch (Exception ex)
                         {
-                            Say($"插件 {pluginModel.Name} 的任务已被取消。");
+                            Say($"启用插件 {pluginModel.Name} 时出错: {ex.Message}");
+                            pluginModel.IsEnabled = false; // 回退状态
                         }
-                        Say($"插件 {pluginModel.Name} 已禁用。");
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Say($"禁用插件 {pluginModel.Name} 时出错: {ex.Message}");
+                        if (!ViewModel.Plugins.Any(p => p.IsEnabled))
+                        {
+                            ViewModel.ResetPages();
+                            Say("所有插件已禁用，第二页已启用。");
+                        }
+
+                        try
+                        {
+                            pluginModel.CancellationTokenSource?.Cancel();
+                            if (CoyoteDevice != null) CoyoteDevice.WaveNow = new DGLablib.WaveformV3();
+                            try
+                            {
+                                pluginModel.PluginTask?.Wait(); // 等待任务完成或取消
+                                Say($"插件 {pluginModel.Name} 的任务已退出。");
+                            }
+                            catch (AggregateException ex) when (ex.InnerExceptions.All(e => e is TaskCanceledException))
+                            {
+                                Say($"插件 {pluginModel.Name} 的任务已被取消。");
+                            }
+                            Say($"插件 {pluginModel.Name} 已禁用。");
+                        }
+                        catch (Exception ex)
+                        {
+                            Say($"禁用插件 {pluginModel.Name} 时出错: {ex.Message}");
+                        }
                     }
+
+                    // 更新 IsAnyPluginEnabled 状态
+                    ViewModel.IsAnyPluginEnabled = ViewModel.Plugins.Any(p => p.IsEnabled);
                 }
             }
         }

@@ -1,9 +1,11 @@
 ﻿using DGLablib;
 using DGLablib.PluginContracts;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace WarthunderDLL
 {
@@ -14,6 +16,9 @@ namespace WarthunderDLL
         public override string? Description => "";
         public override void Init(CancellationToken ctl)
         {
+            Settings["WaveformFrequency"] = 60;
+            Settings["WaveformIntensity"] = 30;
+
             Say.Invoke("Plugin initialized.");
             while (true)
             {
@@ -22,10 +27,20 @@ namespace WarthunderDLL
                     Say.Invoke("Plugin Stopped.");
                     return;
                 }
-
-                var wav1 = new WaveformV3(30, [60, 60, 60, 60]);
+                var frequency = (int)Settings["WaveformFrequency"];
+                var intensity = (int)Settings["WaveformIntensity"];
+                byte _frequency = frequency > 255 ? (byte)255 : (byte)frequency;
+                byte _intensity = intensity > 255 ? (byte)255 : (byte)intensity;
+                var wav1 = new WaveformV3(_intensity, [_frequency, _frequency, _frequency, _frequency]);
                 SetWave.Invoke(wav1);
-                Task.Delay(1000).Wait(ctl);
+                try
+                {
+                    Task.Delay(1000, ctl).Wait(ctl);
+                }
+                catch
+                {
+
+                }
             }
         }
     }

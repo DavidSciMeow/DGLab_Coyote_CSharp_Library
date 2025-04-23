@@ -47,6 +47,7 @@ namespace UIHostCoyoteDevice
 
         private void OnStartClick(object sender, RoutedEventArgs e)
         {
+            ViewModel.ActivateSecondPage();
             if (CoyoteDevice != null)
             {
                 StartButton.IsEnabled = false;
@@ -71,6 +72,7 @@ namespace UIHostCoyoteDevice
         private void OnStopClick(object sender, RoutedEventArgs e)
         {
             CoyoteDevice?.Stop();
+            ViewModel.ResetPages();
             StartButton.IsEnabled = true;
             OneShotButton.IsEnabled = true;
             StopButton.IsEnabled = false;
