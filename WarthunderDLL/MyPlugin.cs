@@ -5,34 +5,30 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace WarthunderDLL
 {
     [Export(typeof(IPlugin))]
-    public class MyPlugin : PluginBase
+    public class MyPlugin : IPlugin
     {
-        public override string Name => "战雷郊狼控制器";
-        public override string? Description => "";
-        public override void Init(CancellationToken ctl)
+        public string Name => "战雷郊狼控制器";
+        public string? Description => "";
+        public Dictionary<string, object> Settings { get; } = [];
+        public void Init(CoyoteDeviceV3 dev, CancellationToken ctl)
         {
             Settings["WaveformFrequency"] = 60;
             Settings["WaveformIntensity"] = 30;
+            dev.Start();
 
-            Say.Invoke("Plugin initialized.");
             while (true)
             {
-                if (ctl.IsCancellationRequested)
-                {
-                    Say.Invoke("Plugin Stopped.");
-                    return;
-                }
+                if (ctl.IsCancellationRequested) return;
                 var frequency = (int)Settings["WaveformFrequency"];
                 var intensity = (int)Settings["WaveformIntensity"];
                 byte _frequency = frequency > 255 ? (byte)255 : (byte)frequency;
                 byte _intensity = intensity > 255 ? (byte)255 : (byte)intensity;
                 var wav1 = new WaveformV3(_intensity, [_frequency, _frequency, _frequency, _frequency]);
-                SetWave.Invoke(wav1);
+                dev.WaveNow = wav1;
                 try
                 {
                     Task.Delay(1000, ctl).Wait(ctl);
@@ -43,5 +39,7 @@ namespace WarthunderDLL
                 }
             }
         }
+
+        public void Stop(CoyoteDeviceV3 dev, CancellationToken ctl) => dev.Stop();
     }
 }

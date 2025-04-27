@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
-namespace DGLablib
+﻿namespace DGLablib
 {
     //[StructLayout(LayoutKind.Sequential, Pack = 1)]
     //public struct WaveformV2

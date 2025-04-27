@@ -1,24 +1,13 @@
 ﻿using DGLablib.PluginContracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace UIHostCoyoteDevice
 {
     public partial class SettingsWindow : Window
     {
-        private readonly PluginBase Plg;
-        public SettingsWindow(PluginBase plg)
+        private readonly IPlugin Plg;
+        public SettingsWindow(IPlugin plg)
         {
             InitializeComponent();
             Plg = plg;
@@ -70,12 +59,15 @@ namespace UIHostCoyoteDevice
             {
                 if (tryParse(textBox?.Text ?? "", out var newValue))
                 {
-                    Plg.UpdateSetting(setting.Key, newValue!);
+                    Plg.Settings[setting.Key] = newValue!;
                 }
                 else
                 {
-                    MessageBox.Show($"无效的值: {textBox.Text}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-                    textBox.Text = setting.Value.ToString(); // 恢复原值
+                    if(textBox != null)
+                    {
+                        MessageBox.Show($"无效的值: {textBox.Text}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                        textBox.Text = setting.Value.ToString(); // 恢复原值
+                    }
                 }
             };
 
@@ -90,8 +82,8 @@ namespace UIHostCoyoteDevice
                 Margin = new Thickness(0, 0, 0, 10)
             };
 
-            checkBox.Checked += (s, e) => Plg.UpdateSetting(setting.Key, true);
-            checkBox.Unchecked += (s, e) => Plg.UpdateSetting(setting.Key, false);
+            checkBox.Checked += (s, e) => Plg.Settings[setting.Key] = true;
+            checkBox.Unchecked += (s, e) => Plg.Settings[setting.Key] = false;
 
             return checkBox;
         }

@@ -1,10 +1,5 @@
 using System.Diagnostics;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading;
-using System.Windows.Threading;
 using Windows.Devices.Bluetooth;
-using Windows.Devices.Bluetooth.Advertisement;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
 using Windows.Storage.Streams;

@@ -6,7 +6,7 @@ namespace UIHostCoyoteDevice
 {
     public partial class MainWindow : Window
     {
-        CoyoteDeviceV3? CoyoteDevice;
+        public static CoyoteDeviceV3? CoyoteDevice;
         public MainViewModel ViewModel { get; set; } = new MainViewModel();
         public MainWindow()
         {

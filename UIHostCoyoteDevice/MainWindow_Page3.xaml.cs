@@ -1,9 +1,7 @@
 ﻿using DGLablib.PluginContracts;
-using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -28,21 +26,7 @@ namespace UIHostCoyoteDevice
                     if (plugin != null && CoyoteDevice != null)
                     {
                         var cancellationTokenSource = new CancellationTokenSource();
-                        var t = new PluginModel
-                        {
-                            Name = plugin.Name,
-                            Description = plugin.Description,
-                            IsEnabled = false,
-                            PluginTask = new Task(() => //挂载用户回调
-                            {
-                                plugin.Say = (str) => Say(str);
-                                plugin.SetWave = (waveform) => CoyoteDevice.WaveNow = waveform;
-                                CoyoteDevice?.Start();
-                                plugin.Init(cancellationTokenSource.Token);
-                            }, cancellationTokenSource.Token),
-                            Plugin = plugin,
-                            CancellationTokenSource = cancellationTokenSource
-                        };
+                        var t = new PluginModel(plugin);
                         ViewModel.Plugins.Add(t);
                     }
                 }
@@ -61,7 +45,7 @@ namespace UIHostCoyoteDevice
                 if (pluginModel.Plugin != null)
                 {
                     // 打开设置窗口
-                    var settingsWindow = new SettingsWindow((PluginBase)pluginModel.Plugin);
+                    var settingsWindow = new SettingsWindow(pluginModel.Plugin);
                     settingsWindow.ShowDialog();
                 }
                 else
@@ -75,7 +59,7 @@ namespace UIHostCoyoteDevice
             {
                 if (sender is Button { Tag: PluginModel pluginModel } && pluginModel.Plugin != null)
                 {
-                    var settingsWindow = new SettingsWindow((PluginBase)pluginModel.Plugin);
+                    var settingsWindow = new SettingsWindow(pluginModel.Plugin);
                     settingsWindow.ShowDialog();
                 }
             }
@@ -97,7 +81,7 @@ namespace UIHostCoyoteDevice
 
                         try
                         {
-                            pluginModel.PluginTask?.Start();
+                            pluginModel.Start();
                             Say($"插件 {pluginModel.Name} 已启用。");
                         }
                         catch (Exception ex)
@@ -116,11 +100,9 @@ namespace UIHostCoyoteDevice
 
                         try
                         {
-                            pluginModel.CancellationTokenSource?.Cancel();
-                            if (CoyoteDevice != null) CoyoteDevice.WaveNow = new DGLablib.WaveformV3();
+                            pluginModel.Stop();
                             try
                             {
-                                pluginModel.PluginTask?.Wait(); // 等待任务完成或取消
                                 Say($"插件 {pluginModel.Name} 的任务已退出。");
                             }
                             catch (AggregateException ex) when (ex.InnerExceptions.All(e => e is TaskCanceledException))

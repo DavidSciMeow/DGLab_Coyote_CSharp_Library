@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Threading;
 
@@ -7,11 +8,11 @@ namespace DGLablib.PluginContracts
     [InheritedExport]
     public interface IPlugin
     {
-        string Name { get; }
-        string? Description { get; }
-        void Init(CancellationToken ctl);
-        Action<WaveformV3> SetWave { get; set; }
-        Action<string> Say { get; set; }
+        public string Name { get; }
+        public string? Description { get; }
+        public Dictionary<string, object> Settings { get; }
+        public void Init(CoyoteDeviceV3 dev, CancellationToken ctl);
+        public void Stop(CoyoteDeviceV3 dev, CancellationToken ctl);
     }
 }
 
