@@ -10,7 +10,7 @@ namespace DGLablib.PluginContracts
     {
         public string Name { get; }
         public string? Description { get; }
-        public Dictionary<string, object> Settings { get; }
+        public Dictionary<string, string> Settings { get; }
         public void Init(CoyoteDeviceV3 dev, CancellationToken ctl);
         public void Stop(CoyoteDeviceV3 dev, CancellationToken ctl);
     }

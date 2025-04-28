@@ -77,15 +77,12 @@ namespace UIHostCoyoteDevice
         {
             if (MainWindow.CoyoteDevice != null)
             {
-                if (PluginTask != null && !PluginTask.IsCompleted)
-                {
-                    PluginTask.Start();
-                }
-                else
+                if (PluginTask == null || PluginTask.IsCompleted)
                 {
                     CancellationTokenSource = new CancellationTokenSource();
                     PluginTask = new Task(() => _plugin.Init(MainWindow.CoyoteDevice, CancellationTokenSource.Token), CancellationTokenSource.Token);
                 }
+                PluginTask.Start();
             }
             else
             {
@@ -96,18 +93,17 @@ namespace UIHostCoyoteDevice
         {
             if (MainWindow.CoyoteDevice != null && CancellationTokenSource != null)
             {
-                _plugin.Stop(MainWindow.CoyoteDevice, CancellationTokenSource.Token);
+                Plugin.Stop(MainWindow.CoyoteDevice, CancellationTokenSource.Token);
+                IsEnabled = false;
 
-                if (PluginTask?.IsCanceled ?? true)
-                {
-                    return;
-                }
+                if (PluginTask?.IsCanceled ?? true) return;
 
                 if (PluginTask != null && !PluginTask.IsCompleted)
                 {
                     CancellationTokenSource.Cancel();
                     PluginTask.Wait();
                 }
+
             }
         }
 

@@ -11,7 +11,7 @@ namespace UIHostCoyoteDevice
     public partial class MainWindow : Window
     {
         [ImportMany] public IEnumerable<IPlugin> Ipl { get; set; } = null!;
-        private void OnLoadPluginsClick(object sender, RoutedEventArgs e)
+        public void LoadPlugins()
         {
             try
             {
@@ -19,24 +19,26 @@ namespace UIHostCoyoteDevice
                 var catalog = new DirectoryCatalog(pluginDirectory);
                 var container = new CompositionContainer(catalog);
                 container.ComposeParts(this);
+
                 ViewModel.Plugins.Clear();
-                Ipl = [.. Ipl.GroupBy(plugin => plugin.Name).Select(group => group.First())];
+                Ipl = Ipl.GroupBy(plugin => plugin.Name).Select(group => group.First());
+
                 foreach (var plugin in Ipl)
                 {
-                    if (plugin != null && CoyoteDevice != null)
+                    if (plugin != null)
                     {
-                        var cancellationTokenSource = new CancellationTokenSource();
-                        var t = new PluginModel(plugin);
-                        ViewModel.Plugins.Add(t);
+                        ViewModel.Plugins.Add(new PluginModel(plugin));
                     }
                 }
+
                 Say("插件扫描完成！");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"扫描插件时出错: {ex.Message}");
+                MessageBox.Show($"扫描插件时出错: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        private void OnLoadPluginsClick(object sender, RoutedEventArgs e) => LoadPlugins();
         private void OnSettingsButtonClick(object sender, RoutedEventArgs e)
         {
             if (sender is Button { Tag: PluginModel pluginModel } && pluginModel.Plugin != null)

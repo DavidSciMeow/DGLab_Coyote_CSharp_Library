@@ -3,6 +3,8 @@
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:ui="http://schemas.modernwpf.com/2019" 
+        ui:WindowHelper.UseModernWindowStyle="True"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UIHostCoyoteDevice"
         mc:Ignorable="d"
@@ -37,7 +39,8 @@
                         <TextBlock VerticalAlignment="Center" Margin="5" Text="本页用于设置实例, 如果扫描到多个实例请选择正确的蓝牙ID识别连接."/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        
+                        <!-- 等待动画 -->
+                        <ui:ProgressRing x:Name="LoadingAnimation" IsActive="False" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </StackPanel>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Button Name="ScanButton" Content="扫描相关设备" Click="OnScanClick" Width="300" />
@@ -65,23 +68,23 @@
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Label Content="通道A电压基准(%):" VerticalAlignment="Center" Margin="2"/>
                         <Slider VerticalAlignment="Center" Name="SA" Width="200" Margin="5" Minimum="0" Maximum="100" Value="{Binding SliderViewModel.SAValue, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.SAValue}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.SAValue}"/>
                         <Label Content="通道B电压基准(%):" VerticalAlignment="Center" Margin="2"/>
                         <Slider VerticalAlignment="Center" Name="SB" Width="200" Margin="5" Minimum="0" Maximum="100" Value="{Binding SliderViewModel.SBValue, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.SBValue}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.SBValue}"/>
                         <CheckBox Name="OnlyA" Content="仅输出A通道" VerticalAlignment="Center" Margin="5" Checked="OnOnlyAChecked" Unchecked="OnOnlyAChecked" />
                     </StackPanel>
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Label Content="通道A频率:" VerticalAlignment="Center" Margin="2"/>
                         <Slider VerticalAlignment="Center" Name="fA1" Width="150" Margin="5" Minimum="0" Maximum="255" Value="{Binding SliderViewModel.FA1Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" />
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FA1Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FA1Value}"/>
                         <Slider VerticalAlignment="Center" Name="fA2" Width="150" Margin="5" Minimum="0" Maximum="255" Value="{Binding SliderViewModel.FA2Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SliderViewModel.IsFreqALocked, Converter={StaticResource InverseBooleanConverter}}"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FA2Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FA2Value}"/>
                         <Slider VerticalAlignment="Center" Name="fA3" Width="150" Margin="5" Minimum="0" Maximum="255" Value="{Binding SliderViewModel.FA3Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SliderViewModel.IsFreqALocked, Converter={StaticResource InverseBooleanConverter}}"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FA3Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FA3Value}"/>
                         <Slider VerticalAlignment="Center" Name="fA4" Width="150" Margin="5" Minimum="0" Maximum="255" Value="{Binding SliderViewModel.FA4Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SliderViewModel.IsFreqALocked, Converter={StaticResource InverseBooleanConverter}}"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FA4Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FA4Value}"/>
                         <CheckBox Name="LockFreqA" Content="锁定A通道频率" VerticalAlignment="Center" IsChecked="{Binding SliderViewModel.IsFreqALocked}" />
 
                     </StackPanel>
@@ -89,13 +92,13 @@
                     <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Label Content="通道A电压:" VerticalAlignment="Center" Margin="2"/>
                         <Slider VerticalAlignment="Center" Name="iA1" Width="150" Margin="5" Minimum="0" Maximum="100" Value="{Binding SliderViewModel.IA1Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SliderViewModel.IsInstALocked, Converter={StaticResource InverseBooleanConverter}}"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IA1Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IA1Value}"/>
                         <Slider VerticalAlignment="Center" Name="iA2" Width="150" Margin="5" Minimum="0" Maximum="100" Value="{Binding SliderViewModel.IA2Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SliderViewModel.IsInstALocked, Converter={StaticResource InverseBooleanConverter}}"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IA2Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IA2Value}"/>
                         <Slider VerticalAlignment="Center" Name="iA3" Width="150" Margin="5" Minimum="0" Maximum="100" Value="{Binding SliderViewModel.IA3Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SliderViewModel.IsInstALocked, Converter={StaticResource InverseBooleanConverter}}"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IA3Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IA3Value}"/>
                         <Slider VerticalAlignment="Center" Name="iA4" Width="150" Margin="5" Minimum="0" Maximum="100" Value="{Binding SliderViewModel.IA4Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SliderViewModel.IsInstALocked, Converter={StaticResource InverseBooleanConverter}}"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IA4Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IA4Value}"/>
                         <CheckBox Name="LockInstA" Content="锁定A通道电压" VerticalAlignment="Center" Margin="5" IsChecked="{Binding SliderViewModel.IsInstALocked}" />
 
                     </StackPanel>
@@ -103,13 +106,13 @@
                     <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Label Content="通道B频率:" VerticalAlignment="Center" Margin="2"/>
                         <Slider VerticalAlignment="Center" Name="fB1" Width="150" Margin="5" Minimum="0" Maximum="255" Value="{Binding SliderViewModel.FB1Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FB1Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FB1Value}"/>
                         <Slider VerticalAlignment="Center" Name="fB2" Width="150" Margin="5" Minimum="0" Maximum="255" Value="{Binding SliderViewModel.FB2Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SliderViewModel.IsFreqBLocked, Converter={StaticResource InverseBooleanConverter}}"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FB2Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FB2Value}"/>
                         <Slider VerticalAlignment="Center" Name="fB3" Width="150" Margin="5" Minimum="0" Maximum="255" Value="{Binding SliderViewModel.FB3Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SliderViewModel.IsFreqBLocked, Converter={StaticResource InverseBooleanConverter}}"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FB3Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FB3Value}"/>
                         <Slider VerticalAlignment="Center" Name="fB4" Width="150" Margin="5" Minimum="0" Maximum="255" Value="{Binding SliderViewModel.FB4Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SliderViewModel.IsFreqBLocked, Converter={StaticResource InverseBooleanConverter}}"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FB4Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.FB4Value}"/>
                         <CheckBox Name="LockFreqB" Content="锁定B通道频率" VerticalAlignment="Center" Margin="5" IsChecked="{Binding SliderViewModel.IsFreqBLocked}" />
 
                     </StackPanel>
@@ -117,13 +120,13 @@
                     <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Label Content="通道B电压:" VerticalAlignment="Center" Margin="2"/>
                         <Slider VerticalAlignment="Center" Name="iB1" Margin="5" Minimum="0" Maximum="100" Value="{Binding SliderViewModel.IB1Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SliderViewModel.IsInstBLocked, Converter={StaticResource InverseBooleanConverter}}" Width="150"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IB1Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IB1Value}"/>
                         <Slider VerticalAlignment="Center" Name="iB2" Width="150" Margin="5" Minimum="0" Maximum="100" Value="{Binding SliderViewModel.IB2Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SliderViewModel.IsInstBLocked, Converter={StaticResource InverseBooleanConverter}}"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IB2Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IB2Value}"/>
                         <Slider VerticalAlignment="Center" Name="iB3" Width="150" Margin="5" Minimum="0" Maximum="100" Value="{Binding SliderViewModel.IB3Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SliderViewModel.IsInstBLocked, Converter={StaticResource InverseBooleanConverter}}"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IB3Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IB3Value}"/>
                         <Slider VerticalAlignment="Center" Name="iB4" Width="150" Margin="5" Minimum="0" Maximum="100" Value="{Binding SliderViewModel.IB4Value, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SliderViewModel.IsInstBLocked, Converter={StaticResource InverseBooleanConverter}}"/>
-                        <TextBlock Width="20" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IB4Value}"/>
+                        <TextBlock Width="25" VerticalAlignment="Center" Margin="10" Text="{Binding SliderViewModel.IB4Value}"/>
                         <CheckBox Name="LockInstB" Content="锁定B通道电压" VerticalAlignment="Center" Margin="5" IsChecked="{Binding SliderViewModel.IsInstBLocked}" />
 
                     </StackPanel>
@@ -140,7 +143,7 @@
             </TabItem>
             <TabItem Header="插件管理" IsEnabled="{Binding IsThirdPageEnabled}">
                 <StackPanel>
-                    <Button Content="扫描插件" Click="OnLoadPluginsClick" />
+                    <Button Content="扫描插件" IsEnabled="{Binding IsSecondPageEnabled}" Click="OnLoadPluginsClick" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                     <ListView ItemsSource="{Binding Plugins}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -148,7 +151,7 @@
                                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsEnabled, Mode=TwoWay}" Checked="OnPluginEnabledChanged" Unchecked="OnPluginEnabledChanged" />
                                     <TextBlock VerticalAlignment="Center" Margin="10" Text="{Binding Name}"/>
                                     <TextBlock VerticalAlignment="Center" Margin="10" Text="{Binding Description}"/>
-                                    <Button Content="设置" Width="75" Margin="5,0,0,0" VerticalAlignment="Center" Click="OnSettingsButtonClick" Tag="{Binding}" />
+                                    <Button Content="设置" Width="75" Margin="5,0,0,0" VerticalAlignment="Center" Click="OnSettingsButtonClick" Tag="{Binding}" IsEnabled="{Binding IsEnabled}" />
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>

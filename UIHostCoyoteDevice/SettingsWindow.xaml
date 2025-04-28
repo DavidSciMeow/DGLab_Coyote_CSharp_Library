@@ -1,8 +1,10 @@
 ﻿<Window x:Class="UIHostCoyoteDevice.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Settings" Height="300" Width="400">
-    <ScrollViewer>
+        xmlns:ui="http://schemas.modernwpf.com/2019" 
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Title="SettingsWindow" Height="450" Width="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel x:Name="SettingsPanel" Margin="10" />
     </ScrollViewer>
 </Window>
