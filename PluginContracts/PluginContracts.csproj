@@ -6,7 +6,36 @@
     <RootNamespace>DGLablib.PluginContracts</RootNamespace>
     <AssemblyName>DGLab.PluginContracts</AssemblyName>
     <OutputType>Library</OutputType>
+    <PackageId>Meow.DGLab.PluginContracts</PackageId>
+    <Title>DGLab.PluginContracts</Title>
+    <Version>1.0.1</Version>
+    <Authors>DavidSciMeow</Authors>
+    <Company>Electronicute</Company>
+    <Product>DGLab.PluginContracts</Product>
+    <Copyright>@ 2025 Electronicute</Copyright>
+    <PackageIcon>Square.PNG</PackageIcon>
+    <RepositoryUrl>https://github.com/DavidSciMeow/DGLab_Coyote_CSharp_Library/</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/DavidSciMeow/DGLab_Coyote_CSharp_Library/</PackageProjectUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <IsPublishable>False</IsPublishable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <IsPublishable>False</IsPublishable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\Square.PNG">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Composition" Version="9.0.4" />
