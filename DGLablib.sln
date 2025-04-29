@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIHostCoyoteDevice", "UIHos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginContracts", "PluginContracts\PluginContracts.csproj", "{21B9EEA3-809F-4992-9B72-15FBB66354F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarthunderDLL", "WarthunderDLL\WarthunderDLL.csproj", "{49168154-36E5-488C-9C5B-185FDEC0EA17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarthunderDLL", "WarthunderDLL\WarthunderDLL.csproj", "{8E1AAF3E-AF9B-0C55-90EA-D67F45B089DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{21B9EEA3-809F-4992-9B72-15FBB66354F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21B9EEA3-809F-4992-9B72-15FBB66354F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21B9EEA3-809F-4992-9B72-15FBB66354F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49168154-36E5-488C-9C5B-185FDEC0EA17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49168154-36E5-488C-9C5B-185FDEC0EA17}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49168154-36E5-488C-9C5B-185FDEC0EA17}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49168154-36E5-488C-9C5B-185FDEC0EA17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E1AAF3E-AF9B-0C55-90EA-D67F45B089DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E1AAF3E-AF9B-0C55-90EA-D67F45B089DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E1AAF3E-AF9B-0C55-90EA-D67F45B089DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E1AAF3E-AF9B-0C55-90EA-D67F45B089DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

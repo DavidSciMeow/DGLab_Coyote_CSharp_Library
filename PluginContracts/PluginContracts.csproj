@@ -20,6 +20,9 @@
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/DavidSciMeow/DGLab_Coyote_CSharp_Library/</PackageProjectUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>详细信息请访问wiki
+https://github.com/DavidSciMeow/DGLab_Coyote_CSharp_Library/wiki</Description>
+    <PackageTags>CoyoteDevice, DGLab, Coyote</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
